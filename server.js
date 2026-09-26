@@ -425,8 +425,12 @@ app.post("/api/posts/:id/photo", upload.single("photo"), async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get("host")}`;
+    const fullImageUrl = `${baseUrl}${post.imageUrl}`;
+
     const postObj = post.toObject();
     postObj.id = postObj._id.toString();
+    postObj.imageUrl = fullImageUrl;
 
     res.json({ imageUrl, post: postObj });
   } catch (err) {
